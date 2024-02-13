@@ -1,14 +1,30 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
   title: LLM Proxy
+  description: LLM Proxy
   version: 0.1.0
 servers:
   - url: https://wxo-llm-proxy.1d13bpwyy9q7.us-east.codeengine.appdomain.cloud
 paths:
+  /:
+    get:
+      summary: Greeting
+      description: Greeting
+      operationId: greeting
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+      security:
+        - HTTPBasic: []
   /v1/generate:
     post:
-      summary: Generate LLM
-      operationId: generate_gb130224
+      summary: Generate
+      description: Generate
+      operationId: generate
       requestBody:
         content:
           application/json:
@@ -73,6 +89,15 @@ components:
       required:
         - message
       title: LLM_Response
+    Message:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+        - message
+      title: Message
     ValidationError:
       properties:
         loc:
@@ -94,3 +119,7 @@ components:
         - msg
         - type
       title: ValidationError
+  securitySchemes:
+    HTTPBasic:
+      type: http
+      scheme: basic
