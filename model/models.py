@@ -15,3 +15,6 @@ class LLM_Response(BaseModel):
 class LLM_Cache_Entry(BaseModel):
     request: LLM_Request
     response: LLM_Response
+
+class Message(BaseModel):
+    message: str

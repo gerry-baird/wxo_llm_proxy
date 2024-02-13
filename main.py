@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.routing import APIRoute
-from model.models import LLM_Request, LLM_Response
+from model.models import LLM_Request, LLM_Response, Message
 from responses.response_util import build_data
 from deep_compare import CompareVariables
 
@@ -13,8 +13,8 @@ security = HTTPBasic()
 preset_responses = build_data()
 
 @app.get("/")
-async def root():
-    return {"message": "Hello World"}
+async def greeting(credentials: HTTPBasicCredentials = Depends(security)) -> Message:
+    return {"message": "LLM Proxy is Alive"}
 
 @app.post("/v1/generate")
 async def generate(llm_request: LLM_Request) -> LLM_Response:

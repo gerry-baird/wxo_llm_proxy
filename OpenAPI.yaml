@@ -1,0 +1,96 @@
+openapi: 3.0.1
+info:
+  title: LLM Proxy
+  version: 0.1.0
+servers:
+  - url: https://wxo-llm-proxy.1d13bpwyy9q7.us-east.codeengine.appdomain.cloud
+paths:
+  /v1/generate:
+    post:
+      summary: Generate LLM
+      operationId: generate_gb130224
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LLM_Request'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LLM_Response'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    LLM_Request:
+      properties:
+        prompt:
+          type: string
+          title: Prompt
+        model_id:
+          type: string
+          title: Model Id
+        max_new_tokens:
+          type: integer
+          title: Max New Tokens
+        min_new_tokens:
+          type: integer
+          title: Min New Tokens
+        decoding_method:
+          type: string
+          title: Decoding Method
+      type: object
+      required:
+        - prompt
+        - model_id
+        - max_new_tokens
+        - min_new_tokens
+        - decoding_method
+      title: LLM_Request
+    LLM_Response:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+        - message
+      title: LLM_Response
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
